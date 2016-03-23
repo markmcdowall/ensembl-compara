@@ -91,13 +91,12 @@ my $gene_join =
 q/join CORE.gene g on (g.gene_id=ox.ensembl_id and ox.ensembl_object_type='Gene')/;
 
 my $get_associations_direct = q/
-select dbprimary_acc,count(*) as cnt from gene_tree_root r  
-join gene_tree_node n using (root_id)  
+select dbprimary_acc,count(*) as cnt from gene_tree_node n  
 join seq_member m using (seq_member_id)  
 join member_xref mg on (m.gene_member_id=mg.gene_member_id)
 join external_db e using (external_db_id)  
-where r.root_id=? and e.db_name=?
-group by dbprimary_acc,db_name order by cnt desc, dbprimary_acc asc
+where n.root_id=? and e.db_name=?
+group by dbprimary_acc order by cnt desc, dbprimary_acc asc
 /;
 
 my $get_members_for_xref = q/
